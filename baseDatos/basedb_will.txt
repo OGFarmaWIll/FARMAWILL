@@ -1,0 +1,250 @@
+
+CREATE DATABASE BDFARMAWILL;
+
+USE BDFARMAWILL;
+
+CREATE TABLE twl_usuarios (
+    c_idusuario INT PRIMARY KEY AUTO_INCREMENT,
+    c_nombre VARCHAR(30),
+    c_apellidos VARCHAR(100),
+    c_login VARCHAR(30),
+    c_pass VARCHAR(30),
+    c_estado BOOLEAN
+);
+
+CREATE TABLE twl_roles (
+    c_idrol INT PRIMARY KEY AUTO_INCREMENT,
+    c_descr VARCHAR(30)
+);
+
+CREATE TABLE twl_permisos (
+    c_idpermiso INT PRIMARY KEY AUTO_INCREMENT,
+    c_nombre VARCHAR(100),
+    c_categoria VARCHAR(50)
+);
+
+CREATE TABLE twl_rol_permisos (
+    c_id INT PRIMARY KEY AUTO_INCREMENT,
+    c_idrol INT,
+    c_idpermiso INT,
+    FOREIGN KEY (c_idrol) REFERENCES twl_roles(c_idrol) ON DELETE CASCADE,
+    FOREIGN KEY (c_idpermiso) REFERENCES twl_permisos(c_idpermiso) ON DELETE CASCADE
+);
+
+CREATE TABLE twl_usuario_roles (
+    c_id INT PRIMARY KEY AUTO_INCREMENT,
+    c_idusuario INT,
+    c_idrol INT,
+    FOREIGN KEY (c_idusuario) REFERENCES twl_usuarios(c_idusuario) ON DELETE CASCADE,
+    FOREIGN KEY (c_idrol) REFERENCES twl_roles(c_idrol) ON DELETE CASCADE
+);
+
+
+
+INSERT INTO twl_permisos (c_nombre, c_categoria) VALUES
+
+('inicio', 'General'), 
+('caja', 'General'), 
+('vender', 'General'), 
+('productos', 'General'),
+
+('categorias', 'Catalogos'), 
+('laboratorios', 'Catalogos'), 
+('clientes', 'Catalogos'), 
+('doctores', 'Catalogos'), 
+('proveedores', 'Catalogos'),
+
+('inventario', 'Almacen'), 
+('reabastecimiento', 'Almacen'), 
+('pedidos', 'Almacen'), 
+('guia_remision', 'Almacen'),
+
+('reporte_venta', 'Reportes'), 
+('reporte_cliente', 'Reportes'), 
+('reporte_doctor', 'Reportes'), 
+('reporte_usuario', 'Reportes'),
+
+('admin_roles', 'Administracion');
+
+
+
+
+CREATE TABLE twl_categorias (
+    c_idcategoria INT PRIMARY KEY AUTO_INCREMENT,
+    c_desc VARCHAR(50),
+    c_tipo VARCHAR(30)
+);
+
+CREATE TABLE twl_laboratorio (
+    c_idlaboratorio INT PRIMARY KEY AUTO_INCREMENT,
+    c_desc VARCHAR(50),
+    c_tipo VARCHAR(30)
+);
+
+CREATE TABLE twl_proveedor (
+    c_idproveedor INT PRIMARY KEY AUTO_INCREMENT,
+    c_ruc VARCHAR(20),
+    c_desc VARCHAR(100),
+    c_direccion VARCHAR(50),
+    c_email VARCHAR(50),
+    c_telefono VARCHAR(20)
+);
+
+CREATE TABLE twl_productos (
+    c_idproducto INT PRIMARY KEY AUTO_INCREMENT,
+    c_codigobarras VARCHAR(30),
+    c_nombre VARCHAR(30),
+    c_idcategoria INT,
+    c_idlaboratorio INT,
+    c_idproveedor INT,
+    c_principal VARCHAR(100),
+    c_presentacion VARCHAR(100),
+    c_registrosanitario VARCHAR(50),
+    c_ubicacion VARCHAR(30),
+    c_lote VARCHAR(30),
+    c_fechavenc DATETIME,
+    c_minimaeninv FLOAT,
+    c_inventarioini FLOAT,
+    c_imagen VARCHAR(100),
+    FOREIGN KEY (c_idcategoria) REFERENCES twl_categorias(c_idcategoria),
+    FOREIGN KEY (c_idlaboratorio) REFERENCES twl_laboratorio(c_idlaboratorio),
+    FOREIGN KEY (c_idproveedor) REFERENCES twl_proveedor(c_idproveedor)
+);
+
+CREATE TABLE twl_unidadmedida (
+    c_idunidadmedida INT PRIMARY KEY AUTO_INCREMENT,
+    c_desc VARCHAR(50)
+);
+
+CREATE TABLE twl_presentacion (
+    id_presentacion INT PRIMARY KEY AUTO_INCREMENT,
+    c_idunidadmedida INT,
+    c_idproducto INT,
+    c_preciocompra FLOAT,
+    c_gananciaunidad FLOAT,
+    c_cantidadunidad FLOAT,
+    c_preciounidad FLOAT,
+    c_comisionunidad FLOAT,
+    FOREIGN KEY (c_idunidadmedida) REFERENCES twl_unidadmedida(c_idunidadmedida),
+    FOREIGN KEY (c_idproducto) REFERENCES twl_productos(c_idproducto)
+);
+
+CREATE TABLE twl_clientes (
+    c_idcliente INT PRIMARY KEY AUTO_INCREMENT,
+    c_iddni VARCHAR(20),
+    c_nombres VARCHAR(100),
+    c_direccion VARCHAR(100),
+    c_email VARCHAR(50),
+    c_telefono VARCHAR(20)
+);
+
+CREATE TABLE twl_doctor (
+    c_iddoctor INT PRIMARY KEY AUTO_INCREMENT,
+    c_cmp VARCHAR(20),
+    c_nombres VARCHAR(100),
+    c_especialidad VARCHAR(50),
+    c_direccion VARCHAR(50),
+    c_email VARCHAR(50),
+    c_telefono VARCHAR(20)
+);
+
+
+INSERT INTO twl_unidadmedida (c_desc) VALUES
+('UNIDAD'),
+('AMPOLLA'),
+('BLISTER'),
+('CAJA'),
+('CAPSULA'),
+('COMPRIMIDO'),
+('FRASCO'),
+('LATA'),
+('PACK'),
+('PAQUETE'),
+('POTE'),
+('SACHET'),
+('SOBRE'),
+('TABLETA'),
+('TUBO');
+
+
+
+
+create table twl_venta(
+c_idventa int PRIMARY KEY AUTO_INCREMENT,
+c_iddoctor int,
+c_idcliente int,
+c_tipodoc int,
+c_descuentoADI float,
+c_tipopago int,
+c_subtotal float,
+c_descuento float,
+c_igv float,
+c_total float,
+c_idusuario int,
+c_fecharegistro datetime,
+c_detalle varchar(250),
+c_ID_Cierre int
+);
+
+
+
+create table twl_ventadet
+(
+c_idventadet int PRIMARY KEY AUTO_INCREMENT,
+c_idventa int,
+c_cantidad float,
+c_idunidadmedida int,
+c_ididproducto int,
+c_Preciounitario float,
+c_preciototal float,
+c_Desc float
+);
+
+create table twl_cierrecaja(
+c_ID_Cierre int PRIMARY KEY AUTO_INCREMENT,
+c_fechacierre datetime,
+c_idusuariocierre int, 
+c_Total_Final float,
+c_Comentarios varchar(250)
+);
+
+create table twl_tipodocumento
+(
+c_tipodoc int PRIMARY KEY AUTO_INCREMENT,
+c_desc varchar(50)
+);
+
+INSERT INTO twl_tipodocumento (c_desc) VALUES
+('Nota de venta'),
+('Factura'),
+('Boleta');
+
+create table twl_tipopago
+(
+c_tipopago int PRIMARY KEY AUTO_INCREMENT,
+c_desc varchar(50)
+);
+
+INSERT INTO twl_tipopago (c_desc) VALUES
+('Efectivo'),
+('Crédito'),
+('Tarjeta'),
+('Yape'),
+('Plin'),
+('Mixto');
+
+
+INSERT INTO twl_usuarios (c_nombre, c_apellidos, c_login, c_pass, c_estado)
+VALUES ('Admin', 'Administrador', 'admin', 'admin', 1);
+
+INSERT INTO twl_roles (c_descr) VALUES ('Administrador');
+
+SET @id_rol_admin = LAST_INSERT_ID();
+
+INSERT INTO twl_rol_permisos (c_idrol, c_idpermiso)
+SELECT @id_rol_admin, c_idpermiso FROM twl_permisos;
+
+INSERT INTO twl_usuario_roles (c_idusuario, c_idrol) VALUES (1, 1);
+
+
+
