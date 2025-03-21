@@ -25,7 +25,7 @@
         <div class="header">
             <img src="{{ public_path('imagen-logo.jpg') }}" 
                 class="logo" alt="Farmapro+" style="height: 200px; background-color: #f5f5f5;">
-            <div class="title">BOTICA FARMAPRO+</div>
+            <div class="title">BOTICA FARMAWILL</div>
             <div>RUC: 1006040409</div>
             <div>LIMA</div>
             <div>970975444</div>
@@ -35,7 +35,7 @@
         </div>  
 
         <div class="info">
-            <div><strong>Vendedor:</strong> Administrador FarmaPro+ </div>
+            <div><strong>Vendedor:</strong> Administrador FARMAWILL </div>
         </div>
 
         <div class="info">
